@@ -54,7 +54,7 @@ else if (YourDAWName.Length != 0)
 	DAWName.Text = "Your DAW Name";
 	if (SomeConditions)
 	{
-	    ProjectOpening.Text = SomeScripts();
+		ProjectOpening.Text = SomeScripts();
 	}
 	else
 	{
