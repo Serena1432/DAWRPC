@@ -11,7 +11,7 @@ It will show as the following:
 * FL Studio 11 or later
 * Ableton Live 9 Intro or later (doesn't support Lite, Beta and Trial version)
 * REAPER
-* Bitwig Studio ||(fxxk Bitwig, you used more CPU and RAM than Ableton)||
+* Bitwig Studio (fxxk Bitwig, you used more CPU and RAM than Ableton)
 
 ## Installation
 
