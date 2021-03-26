@@ -1,0 +1,13 @@
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\bin\Debug\DAWRPC.exe
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\bin\Debug\DAWRPC.pdb
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\bin\Debug\DiscordRPC.dll
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\bin\Debug\DiscordRPC.pdb
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\bin\Debug\DiscordRPC.xml
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\obj\Debug\DAWRPC.Form1.resources
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\obj\Debug\DAWRPC.Properties.Resources.resources
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\obj\Debug\DAWRPC.csproj.GenerateResource.Cache
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\obj\Debug\DAWRPC.exe
+C:\Users\Nico\Documents\Visual Studio 2008\Projects\DAWRPC\DAWRPC\obj\Debug\DAWRPC.pdb
