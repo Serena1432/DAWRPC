@@ -18,7 +18,7 @@ namespace DAWRPC
             InitializeComponent();
         }
 
-        string currentDAWName = "None", version = "1.1", state = "";
+        string currentDAWName = "None", version = "1.2", state = "";
         DiscordRpcClient client;
 
         DateTime lastTime, curTime, startTimestamp;
@@ -79,6 +79,7 @@ namespace DAWRPC
                 var Ab10Suite = Process.GetProcessesByName("Ableton Live 10 Suite");
                 var Ab11Suite = Process.GetProcessesByName("Ableton Live 11 Suite");
                 var Reaper = Process.GetProcessesByName("reaper");
+                var Bitwig = Process.GetProcessesByName("Bitwig Studio");
                 // End DAW Process Variables
                 string clientID = "";
                 // Begin DAW Information Grabbing
@@ -276,6 +277,22 @@ namespace DAWRPC
                     var registeredText = "unregistered";
                     if (title.Contains("Registered to ")) registeredText = ", registered to " + title.Substring(title.IndexOf("Registered to ") + 14, title.Length - title.IndexOf("Registered to ") - 14);
                     state = "version " + title.Substring(title.IndexOf(" - REAPER v") + 11, 4) + registeredText + ", " + CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
+                }
+                else if (Bitwig.Length != 0)
+                {
+                    DAWName.Text = "Bitwig Studio";
+                    string title = Bitwig[0].MainWindowTitle;
+                    if (title.Contains("Bitwig Studio - "))
+                    {
+                        ProjectOpening.Text = title.Substring(16, title.Length - 16);
+                    }
+                    else
+                    {
+                        ProjectOpening.Text = "None";
+                    }
+                    CPUUsage.Text = GetCPUUsage(Bitwig[0]) + "%";
+                    RAMUsage.Text = GetRAMUsage(Bitwig[0]);
+                    clientID = "825134933256962108";
                 }
                 // End DAW Process Information Grabbing
                 else
