@@ -18,7 +18,7 @@ namespace DAWRPC
             InitializeComponent();
         }
 
-        string currentDAWName = "None", version = "1.3", state = "", versionText = "";
+        string currentDAWName = "None", version = "1.4", state = "", versionText = "";
         DiscordRpcClient client;
 
         DateTime lastTime, curTime, startTimestamp;
@@ -26,6 +26,12 @@ namespace DAWRPC
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            if (Process.GetProcessesByName("DAWRPC").Length > 1)
+            {
+                timer1.Enabled = false;
+                MessageBox.Show("Another instance of DAWRPC is already running.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+            }
             this.Text = "DAW Discord Rich Presence v" + version;
         }
 
