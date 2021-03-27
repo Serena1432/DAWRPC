@@ -6,6 +6,8 @@ It will show as the following:
 
 ![Discord Presence image](https://i.imgur.com/IuaGOTk.png)
 
+[VirusTotal Scanning](https://www.virustotal.com/gui/file/1f64e61eba346b0cb22b742ffb9b8768fae9f9ba362ff411d2a7eecb913054fd/detection)
+
 ## List of DAW currently supported
 
 * FL Studio 11 or later
