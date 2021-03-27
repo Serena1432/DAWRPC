@@ -65,6 +65,7 @@ else if (YourDAWName.Length != 0)
 	CPUUsage.Text = GetCPUUsage(YourDAWName[0]) + "%";
 	RAMUsage.Text = GetRAMUsage(YourDAWName[0]);
 	clientID = "YourClientID";
+	versionText = YourDAWName[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
 }
 ```
 

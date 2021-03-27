@@ -18,7 +18,7 @@ namespace DAWRPC
             InitializeComponent();
         }
 
-        string currentDAWName = "None", version = "1.2", state = "";
+        string currentDAWName = "None", version = "1.3", state = "", versionText = "";
         DiscordRpcClient client;
 
         DateTime lastTime, curTime, startTimestamp;
@@ -98,6 +98,8 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(FLStudio[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(FLStudio[0]);
                     clientID = "824353827704668163";
+                    state = CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
+                    versionText = FLStudio64[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (FLStudio64.Length != 0)
                 {
@@ -114,6 +116,7 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(FLStudio64[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(FLStudio64[0]);
                     clientID = "824353827704668163";
+                    versionText = FLStudio64[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab9Intro.Length != 0)
                 {
@@ -130,6 +133,7 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(Ab9Intro[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab9Intro[0]);
                     clientID = "824924155534114896";
+                    versionText = Ab9Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab10Intro.Length != 0)
                 {
@@ -146,6 +150,7 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(Ab10Intro[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab10Intro[0]);
                     clientID = "824922704724492339";
+                    versionText = Ab10Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab11Intro.Length != 0)
                 {
@@ -162,6 +167,7 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(Ab11Intro[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab11Intro[0]);
                     clientID = "824924504190091275";
+                    versionText = Ab11Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab9Suite.Length != 0)
                 {
@@ -178,6 +184,7 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(Ab10Suite[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab10Suite[0]);
                     clientID = "824927510215131156";
+                    versionText = Ab9Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab10Suite.Length != 0)
                 {
@@ -194,6 +201,7 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(Ab10Suite[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab10Suite[0]);
                     clientID = "824354477720076309";
+                    versionText = Ab10Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab11Suite.Length != 0)
                 {
@@ -210,6 +218,7 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(Ab11Suite[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab11Suite[0]);
                     clientID = "824365569973288980";
+                    versionText = Ab11Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab9Stan.Length != 0)
                 {
@@ -226,6 +235,7 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(Ab9Stan[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab9Stan[0]);
                     clientID = "824925290526408759";
+                    versionText = Ab9Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab10Stan.Length != 0)
                 {
@@ -242,6 +252,7 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(Ab10Stan[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab10Stan[0]);
                     clientID = "824355553252999208";
+                    versionText = Ab10Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab11Stan.Length != 0)
                 {
@@ -258,6 +269,7 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(Ab11Stan[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab11Stan[0]);
                     clientID = "824365704890679347";
+                    versionText = Ab11Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Reaper.Length != 0)
                 {
@@ -276,7 +288,7 @@ namespace DAWRPC
                     clientID = "825128795039465472";
                     var registeredText = "unregistered";
                     if (title.Contains("Registered to ")) registeredText = ", registered to " + title.Substring(title.IndexOf("Registered to ") + 14, title.Length - title.IndexOf("Registered to ") - 14);
-                    state = "version " + title.Substring(title.IndexOf(" - REAPER v") + 11, 4) + registeredText + ", " + CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
+                    state = "v" + Reaper[0].Modules[0].FileVersionInfo.ProductVersion.ToString() + registeredText.Substring(0, registeredText.IndexOf(" (")) + ", " + CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
                 }
                 else if (Bitwig.Length != 0)
                 {
@@ -293,6 +305,7 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(Bitwig[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Bitwig[0]);
                     clientID = "825134933256962108";
+                    versionText = Bitwig[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 // End DAW Process Information Grabbing
                 else
@@ -323,7 +336,7 @@ namespace DAWRPC
                 {
                     string details = "Opening project: " + ProjectOpening.Text;
                     // Default state for non-REAPER DAW
-                    if (DAWName.Text != "REAPER") state = CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
+                    if (DAWName.Text != "REAPER") state = "v" + versionText + ", " + CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
                     if (ProjectOpening.Text == "None" || ProjectOpening.Text == "Untitled") details = "Opening an untitled project";
                     client.SetPresence(new RichPresence()
                     {
