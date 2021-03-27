@@ -12,6 +12,7 @@ It will show as the following:
 * Ableton Live 9 Intro or later (doesn't support Lite, Beta and Trial version)
 * REAPER
 * Bitwig Studio (fxxk Bitwig, you used more CPU and RAM than Ableton)
+* Studio One
 
 ## Installation
 

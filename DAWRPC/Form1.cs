@@ -80,6 +80,7 @@ namespace DAWRPC
                 var Ab11Suite = Process.GetProcessesByName("Ableton Live 11 Suite");
                 var Reaper = Process.GetProcessesByName("reaper");
                 var Bitwig = Process.GetProcessesByName("Bitwig Studio");
+                var StudioOne = Process.GetProcessesByName("Studio One");
                 // End DAW Process Variables
                 string clientID = "";
                 // Begin DAW Information Grabbing
@@ -306,6 +307,23 @@ namespace DAWRPC
                     RAMUsage.Text = GetRAMUsage(Bitwig[0]);
                     clientID = "825134933256962108";
                     versionText = Bitwig[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
+                }
+                else if (StudioOne.Length != 0)
+                {
+                    DAWName.Text = "Studio One";
+                    string title = StudioOne[0].MainWindowTitle;
+                    if (title.Contains("Studio One - "))
+                    {
+                        ProjectOpening.Text = title.Substring(13, title.Length - 13);
+                    }
+                    else
+                    {
+                        ProjectOpening.Text = "None";
+                    }
+                    CPUUsage.Text = GetCPUUsage(StudioOne[0]) + "%";
+                    RAMUsage.Text = GetRAMUsage(StudioOne[0]);
+                    clientID = "825286462672732160";
+                    versionText = StudioOne[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 // End DAW Process Information Grabbing
                 else
