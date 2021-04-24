@@ -179,7 +179,7 @@ namespace DAWRPC
                 else if (Ab9Suite.Length != 0)
                 {
                     DAWName.Text = "Ableton Live 9 Suite";
-                    string title = Ab10Suite[0].MainWindowTitle;
+                    string title = Ab9Suite[0].MainWindowTitle;
                     if (title.Contains(" - Ableton Live 9 Suite"))
                     {
                         ProjectOpening.Text = title.Substring(0, title.Length - 23);
@@ -188,8 +188,8 @@ namespace DAWRPC
                     {
                         ProjectOpening.Text = "None";
                     }
-                    CPUUsage.Text = GetCPUUsage(Ab10Suite[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab10Suite[0]);
+                    CPUUsage.Text = GetCPUUsage(Ab9Suite[0]) + "%";
+                    RAMUsage.Text = GetRAMUsage(Ab9Suite[0]);
                     clientID = "824927510215131156";
                     versionText = Ab9Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
