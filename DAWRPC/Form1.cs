@@ -18,7 +18,7 @@ namespace DAWRPC
             InitializeComponent();
         }
 
-        string currentDAWName = "None", version = "1.4", state = "", versionText = "";
+        string currentDAWName = "None", version = "1.4.1", state = "", versionText = "";
         DiscordRpcClient client;
 
         DateTime lastTime, curTime, startTimestamp;
@@ -104,7 +104,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(FLStudio[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(FLStudio[0]);
-                    clientID = "824353827704668163";
+                    clientID = "908331713032241153";
                     state = CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
                     versionText = FLStudio64[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
@@ -122,7 +122,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(FLStudio64[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(FLStudio64[0]);
-                    clientID = "824353827704668163";
+                    clientID = "908331713032241153";
                     versionText = FLStudio64[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab9Intro.Length != 0)
@@ -139,7 +139,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Ab9Intro[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab9Intro[0]);
-                    clientID = "824924155534114896";
+                    clientID = "908336639913381918";
                     versionText = Ab9Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab10Intro.Length != 0)
@@ -156,7 +156,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Ab10Intro[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab10Intro[0]);
-                    clientID = "824922704724492339";
+                    clientID = "908338941613207582";
                     versionText = Ab10Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab11Intro.Length != 0)
@@ -173,7 +173,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Ab11Intro[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab11Intro[0]);
-                    clientID = "824924504190091275";
+                    clientID = "908339193854455839";
                     versionText = Ab11Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab9Suite.Length != 0)
@@ -190,7 +190,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Ab9Suite[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab9Suite[0]);
-                    clientID = "824927510215131156";
+                    clientID = "908335858212548608";
                     versionText = Ab9Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab10Suite.Length != 0)
@@ -207,7 +207,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Ab10Suite[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab10Suite[0]);
-                    clientID = "824354477720076309";
+                    clientID = "908336162337349693";
                     versionText = Ab10Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab11Suite.Length != 0)
@@ -224,7 +224,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Ab11Suite[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab11Suite[0]);
-                    clientID = "824365569973288980";
+                    clientID = "908336471193313310";
                     versionText = Ab11Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab9Stan.Length != 0)
@@ -241,7 +241,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Ab9Stan[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab9Stan[0]);
-                    clientID = "824925290526408759";
+                    clientID = "908342188759482388";
                     versionText = Ab9Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab10Stan.Length != 0)
@@ -258,7 +258,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Ab10Stan[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab10Stan[0]);
-                    clientID = "824355553252999208";
+                    clientID = "908342338353528932";
                     versionText = Ab10Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab11Stan.Length != 0)
@@ -275,7 +275,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Ab11Stan[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab11Stan[0]);
-                    clientID = "824365704890679347";
+                    clientID = "908342510802317313";
                     versionText = Ab11Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Reaper.Length != 0)
