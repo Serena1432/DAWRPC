@@ -292,7 +292,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Reaper[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Reaper[0]);
-                    clientID = "825128795039465472";
+                    clientID = "909424276208255067";
                     var registeredText = "unregistered";
                     if (title.Contains("Registered to ")) registeredText = ", registered to " + title.Substring(title.IndexOf("Registered to ") + 14, title.Length - title.IndexOf("Registered to ") - 14);
                     state = "v" + Reaper[0].Modules[0].FileVersionInfo.ProductVersion.ToString() + registeredText.Substring(0, registeredText.IndexOf(" (")) + ", " + CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
@@ -311,7 +311,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Bitwig[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Bitwig[0]);
-                    clientID = "825134933256962108";
+                    clientID = "909425705819992145";
                     versionText = Bitwig[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (StudioOne.Length != 0)
@@ -328,7 +328,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(StudioOne[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(StudioOne[0]);
-                    clientID = "825286462672732160";
+                    clientID = "909425503960727583";
                     versionText = StudioOne[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 // End DAW Process Information Grabbing
