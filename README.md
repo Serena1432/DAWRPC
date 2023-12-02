@@ -4,9 +4,10 @@ This is a small C# application that supports showing what you're making on your 
 
 It will show as the following:
 
-![Discord Presence image](https://i.imgur.com/IuaGOTk.png)
+![Discord Presence image](https://i.imgur.com/7wWlQNM.png)
 
-[VirusTotal Scanning](https://www.virustotal.com/gui/file/1f64e61eba346b0cb22b742ffb9b8768fae9f9ba362ff411d2a7eecb913054fd/detection)
+[VirusTotal Scanning](https://www.virustotal.com/gui/file/e31d0c64fac5dd2b5880d9c2c8264bd4ca1b525a782f70774e1a3ca07b0b639e)<br>
+1 detection from MaxSecure, is this false positive?
 
 ## List of DAW currently supported
 
@@ -15,10 +16,11 @@ It will show as the following:
 * REAPER
 * Bitwig Studio (fxxk Bitwig, you used more CPU and RAM than Ableton)
 * Studio One
+* LMMS
 
 ## Installation
 
-Download the latest release version [here](https://github.com/LilShieru/DAWRPC/releases), extract it and run the `DAWRPC.exe` executable file. Open any supported DAW and enjoy the result!
+Download the latest release version [here](https://github.com/lmharpae/DAWRPC/releases), extract it and run the `DAWRPC.exe` executable file. Open any supported DAW and enjoy the result!
 
 ## How does it work?
 
@@ -26,7 +28,7 @@ This app uses the [Process](https://docs.microsoft.com/en-us/dotnet/api/system.d
 
 ## Dependencies used
 
-* .NET Framework 3.5
+* .NET Framework 4
 * [DiscordRPC](https://github.com/Lachee/discord-rpc-csharp) by Lachee
 * [Newtonsoft.Json](https://www.newtonsoft.com/json)
 * [System.Windows.Forms](https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms)
@@ -35,7 +37,7 @@ This app uses the [Process](https://docs.microsoft.com/en-us/dotnet/api/system.d
 
 ## Editing the source code
 
-Download the latest source code from this repository above and open `DAWRPC.sln` in your Visual Studio that supports .NET Framework 3.5. I used *Visual C# 2008 Express Edition* to make this application (i know, this is an old version but my computer can't run a higher one), and I suggest that you should use it (although i know that no one uses it anymore) to edit my application.
+Download the latest source code from this repository above and open `DAWRPC.sln` in your Visual Studio that supports .NET Framework 4. I used *Visual Studio 2010* to make this application (i know, this is an old version but my computer can't run a higher one), and I suggest that you should use it (although i know that no one uses it anymore) to edit my application.
 
 ### You can add a new DAW support using this method:
 
@@ -76,14 +78,12 @@ with `YourDAWName` as the DAW variable you declared in the above step, `SomeCond
 
 You can see an example in the source code repository.
 
-* **Step 7:** Run the application and test it. After that, you can [send me a Pull Request](https://github.com/LilShieru/DAWRPC/compare) with your new added DAW supporting in the source code.
+* **Step 7:** Run the application and test it. After that, you can [send me a Pull Request](https://github.com/lmharpae/DAWRPC/compare) with your new added DAW supporting in the source code.
 
 ## Contact the developer
 
 You can contact the developer by using these social networks:
 
-* Discord: Nico Levianth#5133 (which I am using the most)
-* Facebook: [Trà Phương Nam](https://www.facebook.com/Yonaka12)
-* Twitter: [@reallynotciel](https://www.twitter.com/reallynotciel) (currently inactive)
-* Instagram: [@reallynotciel](https://www.instagram.com/reallynotciel)
-* YouTube: [LilShieru](https://www.twitter.com/c/yutorimegami)
+* [Discord](https://discord.com/users/693107293516070944)
+* Facebook: `(temporarily not available)`
+* YouTube: [Harpae](https://www.youtube.com/@lmharpae)

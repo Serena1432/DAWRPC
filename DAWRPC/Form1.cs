@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using DiscordRPC;
+using System.Resources;
 
 namespace DAWRPC
 {
@@ -18,11 +19,12 @@ namespace DAWRPC
             InitializeComponent();
         }
 
-        string currentDAWName = "None", version = "1.4.1", state = "", versionText = "";
+        string currentDAWName = "None", version = "2.0", state = "", versionText = "", discordUsernameGlobal = "";
         DiscordRpcClient client;
 
         DateTime lastTime, curTime, startTimestamp;
         TimeSpan lastTotalProcessorTime, curTotalProcessorTime;
+        ComponentResourceManager resources = new ComponentResourceManager(typeof(Form1));
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -32,7 +34,7 @@ namespace DAWRPC
                 MessageBox.Show("Another instance of DAWRPC is already running.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
-            this.Text = "DAW Discord Rich Presence v" + version;
+            this.Text = RPCMenuVersion.Text = "DAW Discord Rich Presence v" + version;
         }
 
         string GetCPUUsage(Process p)
@@ -87,6 +89,7 @@ namespace DAWRPC
                 var Reaper = Process.GetProcessesByName("reaper");
                 var Bitwig = Process.GetProcessesByName("Bitwig Studio");
                 var StudioOne = Process.GetProcessesByName("Studio One");
+                var LMMS = Process.GetProcessesByName("lmms");
                 // End DAW Process Variables
                 string clientID = "";
                 // Begin DAW Information Grabbing
@@ -293,9 +296,7 @@ namespace DAWRPC
                     CPUUsage.Text = GetCPUUsage(Reaper[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Reaper[0]);
                     clientID = "909424276208255067";
-                    var registeredText = "unregistered";
-                    if (title.Contains("Registered to ")) registeredText = ", registered to " + title.Substring(title.IndexOf("Registered to ") + 14, title.Length - title.IndexOf("Registered to ") - 14);
-                    state = "v" + Reaper[0].Modules[0].FileVersionInfo.ProductVersion.ToString() + registeredText.Substring(0, registeredText.IndexOf(" (")) + ", " + CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
+                    versionText = Reaper[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Bitwig.Length != 0)
                 {
@@ -331,6 +332,23 @@ namespace DAWRPC
                     clientID = "909425503960727583";
                     versionText = StudioOne[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
+                else if (LMMS.Length != 0)
+                {
+                    DAWName.Text = "LMMS";
+                    string title = LMMS[0].MainWindowTitle;
+                    if (title.Contains(" - LMMS"))
+                    {
+                        ProjectOpening.Text = title.Substring(0, title.IndexOf(" - LMMS"));
+                    }
+                    else
+                    {
+                        ProjectOpening.Text = "None";
+                    }
+                    CPUUsage.Text = GetCPUUsage(LMMS[0]) + "%";
+                    RAMUsage.Text = GetRAMUsage(LMMS[0]);
+                    clientID = "1180315820446982214";
+                    versionText = LMMS[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
+                }
                 // End DAW Process Information Grabbing
                 else
                 {
@@ -343,7 +361,34 @@ namespace DAWRPC
                 {
                     try
                     {
+                        discordUsername.Text = "No Discord user available";
                         client = new DiscordRpcClient(clientID);
+                        client.OnReady += (readySender, readyEvent) =>
+                        {
+                            discordUsernameGlobal = readyEvent.User.Username;
+                            try
+                            {
+                                if (!String.IsNullOrEmpty(readyEvent.User.Username)) discordUsername.Text = "Logged in as " + readyEvent.User.Username;
+                                else discordUsername.Text = "No Discord user available";
+                            }
+                            catch { }
+                        };
+                        client.OnConnectionFailed += (cfSender, cfEvent) =>
+                        {
+                            discordUsername.Text = "Connection failed";
+                            notifyIcon1.Icon = (Icon)resources.GetObject("red");
+                        };
+                        client.OnError += (eSender, eEvent) =>
+                        {
+                            discordUsername.Text = "An error has been occurred";
+                            notifyIcon1.Icon = (Icon)resources.GetObject("red");
+                        };
+                        client.OnPresenceUpdate += (eSender, eEvent) =>
+                        {
+                            if (!String.IsNullOrEmpty(discordUsernameGlobal)) discordUsername.Text = "Logged in as " + discordUsernameGlobal;
+                            else discordUsername.Text = "No Discord user available";
+                            notifyIcon1.Icon = (Icon)resources.GetObject("green");
+                        };
                         client.Initialize();
                         currentDAWName = DAWName.Text;
                         startTimestamp = DateTime.UtcNow;
@@ -359,8 +404,7 @@ namespace DAWRPC
                 if (DAWName.Text != "None")
                 {
                     string details = "Opening project: " + ProjectOpening.Text;
-                    // Default state for non-REAPER DAW
-                    if (DAWName.Text != "REAPER") state = "v" + versionText + ", " + CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
+                    state = "v" + versionText + ", " + CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
                     if (ProjectOpening.Text == "None" || ProjectOpening.Text == "Untitled") details = "Opening an untitled project";
                     client.SetPresence(new RichPresence()
                     {
@@ -373,18 +417,42 @@ namespace DAWRPC
                         Assets = new Assets()
                         {
                             LargeImageKey = "icon",
-                            LargeImageText = "DAWRPC v" + version + " by Nico Levianth"
+                            LargeImageText = "DAWRPC v" + version + " by Harpae/Nico Levianth"
                         }
                     });
                 }
                 else if (client != null)
                 {
                     client.Dispose();
+                    notifyIcon1.Icon = (Icon)resources.GetObject("red");
+                    discordUsername.Text = "Open a DAW to begin displaying RPC";
                 }
             }
             catch
             {
 
+            }
+        }
+
+        bool exiting = false;
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            exiting = true;
+            Application.Exit();
+        }
+
+        private void openWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Show();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!exiting)
+            {
+                e.Cancel = true;
+                this.Hide();
             }
         }
     }

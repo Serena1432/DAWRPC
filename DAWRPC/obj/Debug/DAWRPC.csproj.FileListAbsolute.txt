@@ -46,3 +46,14 @@ D:\Banchou\DAWRPC\DAWRPC\obj\Debug\DAWRPC.csprojResolveAssemblyReference.cache
 D:\Banchou\DAWRPC\DAWRPC\obj\Debug\DAWRPC.Form1.resources
 D:\Banchou\DAWRPC\DAWRPC\obj\Debug\DAWRPC.Properties.Resources.resources
 D:\Banchou\DAWRPC\DAWRPC\obj\Debug\DAWRPC.csproj.GenerateResource.Cache
+E:\Documents\GitHub\DAWRPC\DAWRPC\obj\Debug\DAWRPC.exe
+E:\Documents\GitHub\DAWRPC\DAWRPC\obj\Debug\DAWRPC.pdb
+E:\Documents\GitHub\DAWRPC\DAWRPC\bin\Debug\DAWRPC.exe
+E:\Documents\GitHub\DAWRPC\DAWRPC\bin\Debug\DAWRPC.pdb
+E:\Documents\GitHub\DAWRPC\DAWRPC\bin\Debug\Newtonsoft.Json.xml
+E:\Documents\GitHub\DAWRPC\DAWRPC\obj\Debug\DAWRPC.csprojResolveAssemblyReference.cache
+E:\Documents\GitHub\DAWRPC\DAWRPC\obj\Debug\DAWRPC.Form1.resources
+E:\Documents\GitHub\DAWRPC\DAWRPC\obj\Debug\DAWRPC.Properties.Resources.resources
+E:\Documents\GitHub\DAWRPC\DAWRPC\obj\Debug\DAWRPC.csproj.GenerateResource.Cache
+E:\Documents\GitHub\DAWRPC\DAWRPC\bin\Debug\DAWRPC.exe.config
+E:\Documents\GitHub\DAWRPC\DAWRPC\bin\Debug\DiscordRPC.dll
