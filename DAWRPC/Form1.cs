@@ -26,6 +26,8 @@ namespace DAWRPC
         TimeSpan lastTotalProcessorTime, curTotalProcessorTime;
         ComponentResourceManager resources = new ComponentResourceManager(typeof(Form1));
 
+        bool errorDisplayed = false;
+
         private void Form1_Load(object sender, EventArgs e)
         {
             if (Process.GetProcessesByName("DAWRPC").Length > 1)
@@ -176,7 +178,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Ab11Intro[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab11Intro[0]);
-                    clientID = "908339193854455839";
+                    clientID = "1189627743919411270";
                     versionText = Ab11Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab9Suite.Length != 0)
@@ -227,7 +229,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Ab11Suite[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab11Suite[0]);
-                    clientID = "908336471193313310";
+                    clientID = "1189627361881235507";
                     versionText = Ab11Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Ab9Stan.Length != 0)
@@ -278,7 +280,7 @@ namespace DAWRPC
                     }
                     CPUUsage.Text = GetCPUUsage(Ab11Stan[0]) + "%";
                     RAMUsage.Text = GetRAMUsage(Ab11Stan[0]);
-                    clientID = "908342510802317313";
+                    clientID = "1189628515801366690";
                     versionText = Ab11Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Reaper.Length != 0)
@@ -370,6 +372,7 @@ namespace DAWRPC
                             {
                                 if (!String.IsNullOrEmpty(readyEvent.User.Username)) discordUsername.Text = "Logged in as " + readyEvent.User.Username;
                                 else discordUsername.Text = "No Discord user available";
+                                errorDisplayed = false;
                             }
                             catch { }
                         };
@@ -377,17 +380,35 @@ namespace DAWRPC
                         {
                             discordUsername.Text = "Connection failed";
                             notifyIcon1.Icon = (Icon)resources.GetObject("red");
+                            if (!errorDisplayed)
+                            {
+                                MessageBox.Show("Cannot connect to Discord pipe " + cfEvent.FailedPipe.ToString() + ".", "DAWRPC Connection Error");
+                                errorDisplayed = true;
+                            }
                         };
                         client.OnError += (eSender, eEvent) =>
                         {
                             discordUsername.Text = "An error has been occurred";
                             notifyIcon1.Icon = (Icon)resources.GetObject("red");
+                            if (!errorDisplayed)
+                            {
+                                MessageBox.Show("Cannot connect to Discord RPC server.\nCode " + eEvent.Code.ToString() + ": " + eEvent.Message, "DAWRPC Connection Error");
+                                errorDisplayed = true;
+                            }
+                        };
+                        client.OnConnectionEstablished += (eSender, eEvent) =>
+                        {
+                            if (!String.IsNullOrEmpty(discordUsernameGlobal)) discordUsername.Text = "Logged in as " + discordUsernameGlobal;
+                            else discordUsername.Text = "No Discord user available";
+                            notifyIcon1.Icon = (Icon)resources.GetObject("green");
+                            errorDisplayed = false;
                         };
                         client.OnPresenceUpdate += (eSender, eEvent) =>
                         {
                             if (!String.IsNullOrEmpty(discordUsernameGlobal)) discordUsername.Text = "Logged in as " + discordUsernameGlobal;
                             else discordUsername.Text = "No Discord user available";
                             notifyIcon1.Icon = (Icon)resources.GetObject("green");
+                            errorDisplayed = false;
                         };
                         client.Initialize();
                         currentDAWName = DAWName.Text;
