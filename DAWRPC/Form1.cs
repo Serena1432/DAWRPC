@@ -82,12 +82,15 @@ namespace DAWRPC
                 var Ab9Intro = Process.GetProcessesByName("Ableton Live 9 Intro");
                 var Ab10Intro = Process.GetProcessesByName("Ableton Live 10 Intro");
                 var Ab11Intro = Process.GetProcessesByName("Ableton Live 11 Intro");
+                var Ab12Intro = Process.GetProcessesByName("Ableton Live 12 Intro");
                 var Ab9Stan = Process.GetProcessesByName("Ableton Live 9 Standard");
                 var Ab10Stan = Process.GetProcessesByName("Ableton Live 10 Standard");
                 var Ab11Stan = Process.GetProcessesByName("Ableton Live 11 Standard");
+                var Ab12Stan = Process.GetProcessesByName("Ableton Live 12 Standard");
                 var Ab9Suite = Process.GetProcessesByName("Ableton Live 9 Suite");
                 var Ab10Suite = Process.GetProcessesByName("Ableton Live 10 Suite");
                 var Ab11Suite = Process.GetProcessesByName("Ableton Live 11 Suite");
+                var Ab12Suite = Process.GetProcessesByName("Ableton Live 12 Suite");
                 var Reaper = Process.GetProcessesByName("reaper");
                 var Bitwig = Process.GetProcessesByName("Bitwig Studio");
                 var StudioOne = Process.GetProcessesByName("Studio One");
@@ -181,6 +184,23 @@ namespace DAWRPC
                     clientID = "1189627743919411270";
                     versionText = Ab11Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
+                else if (Ab12Intro.Length != 0)
+                {
+                    DAWName.Text = "Ableton Live 12 Intro";
+                    string title = Ab12Intro[0].MainWindowTitle;
+                    if (title.Contains(" - Ableton Live 12 Intro"))
+                    {
+                        ProjectOpening.Text = title.Substring(0, title.Length - 24);
+                    }
+                    else
+                    {
+                        ProjectOpening.Text = "None";
+                    }
+                    CPUUsage.Text = GetCPUUsage(Ab12Intro[0]) + "%";
+                    RAMUsage.Text = GetRAMUsage(Ab12Intro[0]);
+                    clientID = "1256767428608790568";
+                    versionText = Ab12Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
+                }
                 else if (Ab9Suite.Length != 0)
                 {
                     DAWName.Text = "Ableton Live 9 Suite";
@@ -232,6 +252,23 @@ namespace DAWRPC
                     clientID = "1189627361881235507";
                     versionText = Ab11Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
+                else if (Ab12Suite.Length != 0)
+                {
+                    DAWName.Text = "Ableton Live 12 Suite";
+                    string title = Ab12Suite[0].MainWindowTitle;
+                    if (title.Contains(" - Ableton Live 12 Suite"))
+                    {
+                        ProjectOpening.Text = title.Substring(0, title.Length - 24);
+                    }
+                    else
+                    {
+                        ProjectOpening.Text = "None";
+                    }
+                    CPUUsage.Text = GetCPUUsage(Ab12Suite[0]) + "%";
+                    RAMUsage.Text = GetRAMUsage(Ab12Suite[0]);
+                    clientID = "1256769208704958464";
+                    versionText = Ab12Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
+                }
                 else if (Ab9Stan.Length != 0)
                 {
                     DAWName.Text = "Ableton Live 9 Standard";
@@ -282,6 +319,23 @@ namespace DAWRPC
                     RAMUsage.Text = GetRAMUsage(Ab11Stan[0]);
                     clientID = "1189628515801366690";
                     versionText = Ab11Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
+                }
+                else if (Ab12Stan.Length != 0)
+                {
+                    DAWName.Text = "Ableton Live 12 Standard";
+                    string title = Ab12Stan[0].MainWindowTitle;
+                    if (title.Contains(" - Ableton Live 12 Standard"))
+                    {
+                        ProjectOpening.Text = title.Substring(0, title.Length - 27);
+                    }
+                    else
+                    {
+                        ProjectOpening.Text = "None";
+                    }
+                    CPUUsage.Text = GetCPUUsage(Ab12Stan[0]) + "%";
+                    RAMUsage.Text = GetRAMUsage(Ab12Stan[0]);
+                    clientID = "1256768586534486146";
+                    versionText = Ab12Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 else if (Reaper.Length != 0)
                 {
