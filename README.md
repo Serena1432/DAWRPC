@@ -4,9 +4,11 @@ This is a small C# application that supports showing what you're making on your 
 
 It will show as the following:
 
-![Discord Presence image](https://i.imgur.com/7wWlQNM.png)
+![Preview](./preview.png)
 
-[VirusTotal Scanning](https://www.virustotal.com/gui/file/e31d0c64fac5dd2b5880d9c2c8264bd4ca1b525a782f70774e1a3ca07b0b639e)<br>
+*What is happening with Discord's profile UI?*
+
+[VirusTotal Scanning](https://www.virustotal.com/gui/file-analysis/MjRkZWY1N2M1ZmE4MmZmNTEwYjAzMzA1ZDFhZDgxNWI6MTcxOTcwODMwMg==)<br>
 1 detection from MaxSecure, is this false positive?
 
 ## List of DAW currently supported
@@ -58,19 +60,19 @@ with `YourDAWName` as the DAW name and `YourDAWProcessName` as your DAW Process 
 ```csharp
 else if (YourDAWName.Length != 0)
 {
-	DAWName.Text = "Your DAW Name";
-	if (SomeConditions)
-	{
-		ProjectOpening.Text = SomeScripts();
-	}
-	else
-	{
-		ProjectOpening.Text = "None";
-	}
-	CPUUsage.Text = GetCPUUsage(YourDAWName[0]) + "%";
-	RAMUsage.Text = GetRAMUsage(YourDAWName[0]);
-	clientID = "YourClientID";
-	versionText = YourDAWName[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
+    DAWName.Text = "Your DAW Name";
+    if (SomeConditions)
+    {
+        ProjectOpening.Text = SomeScripts();
+    }
+    else
+    {
+        ProjectOpening.Text = "None";
+    }
+    CPUUsage.Text = GetCPUUsage(YourDAWName[0]) + "%";
+    RAMUsage.Text = GetRAMUsage(YourDAWName[0]);
+    clientID = "YourClientID";
+    versionText = YourDAWName[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
 }
 ```
 
