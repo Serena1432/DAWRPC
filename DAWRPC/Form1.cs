@@ -419,6 +419,7 @@ namespace DAWRPC
                         if (client != null)
                         {
                             client.Dispose();
+                            currentDAWName = DAWName.Text;
                         }
                     }
                 }
