@@ -38,6 +38,7 @@
             this.RAMUsage = new System.Windows.Forms.Label();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.RPCMenuVersion = new System.Windows.Forms.ToolStripMenuItem();
             this.discordUsername = new System.Windows.Forms.ToolStripMenuItem();
             this.openWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,7 +48,6 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.RPCMenuVersion = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -88,7 +88,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(729, 40);
             this.label4.TabIndex = 4;
-            this.label4.Text = "(C) 2023 Harpae/Nico Levianth. All rights reserved.";
+            this.label4.Text = "(C) 2024 Harpae/Nico Levianth. All rights reserved.";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // timer1
@@ -135,6 +135,13 @@
             this.exitToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(271, 92);
+            // 
+            // RPCMenuVersion
+            // 
+            this.RPCMenuVersion.Enabled = false;
+            this.RPCMenuVersion.Name = "RPCMenuVersion";
+            this.RPCMenuVersion.Size = new System.Drawing.Size(270, 22);
+            this.RPCMenuVersion.Text = "DAW Discord Rich Presence";
             // 
             // discordUsername
             // 
@@ -238,13 +245,6 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(735, 347);
             this.tableLayoutPanel2.TabIndex = 11;
-            // 
-            // RPCMenuVersion
-            // 
-            this.RPCMenuVersion.Enabled = false;
-            this.RPCMenuVersion.Name = "RPCMenuVersion";
-            this.RPCMenuVersion.Size = new System.Drawing.Size(270, 22);
-            this.RPCMenuVersion.Text = "DAW Discord Rich Presence";
             // 
             // Form1
             // 

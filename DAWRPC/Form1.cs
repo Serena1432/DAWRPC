@@ -19,7 +19,7 @@ namespace DAWRPC
             InitializeComponent();
         }
 
-        string currentDAWName = "None", version = "2.1", state = "", versionText = "", discordUsernameGlobal = "";
+        string currentDAWName = "None", version = "2.2", state = "", versionText = "", discordUsernameGlobal = "";
         DiscordRpcClient client;
 
         DateTime lastTime, curTime, startTimestamp;
