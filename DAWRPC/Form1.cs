@@ -95,6 +95,8 @@ namespace DAWRPC
                 var Bitwig = Process.GetProcessesByName("Bitwig Studio");
                 var StudioOne = Process.GetProcessesByName("Studio One");
                 var LMMS = Process.GetProcessesByName("lmms");
+                var Cubase14 = Process.GetProcessesByName("Cubase14");
+
                 // End DAW Process Variables
                 string clientID = "";
                 // Begin DAW Information Grabbing
@@ -404,6 +406,23 @@ namespace DAWRPC
                     RAMUsage.Text = GetRAMUsage(LMMS[0]);
                     clientID = "1180315820446982214";
                     versionText = LMMS[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
+                }
+                else if (Cubase14.Length != 0)
+                {
+                    DAWName.Text = "Cubase 14";
+                    string title = Cubase14[0].MainWindowTitle;
+                    if (title.Contains("Cubase Pro Project - "))
+                    {
+                        ProjectOpening.Text = title.Substring(21, title.Length - 21);
+                    }
+                    else
+                    {
+                        ProjectOpening.Text = "None";
+                    }
+                    CPUUsage.Text = GetCPUUsage(Cubase14[0]) + "%";
+                    RAMUsage.Text = GetRAMUsage(Cubase14[0]);
+                    clientID = "1337652654242795530";
+                    versionText = Cubase14[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
                 // End DAW Process Information Grabbing
                 else
