@@ -19,6 +19,7 @@ It will show as the following:
 * Bitwig Studio (fxxk Bitwig, you used more CPU and RAM than Ableton)
 * Studio One
 * LMMS
+* Cubase 14
 
 ## Installation
 
