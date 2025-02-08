@@ -88,7 +88,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(729, 40);
             this.label4.TabIndex = 4;
-            this.label4.Text = "(C) 2024 Harpae/Nico Levianth. All rights reserved.";
+            this.label4.Text = "(C) 2025 Harpae/Nico Levianth";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // timer1
