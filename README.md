@@ -1,3 +1,5 @@
+### This project is about to be reworked as a new one as described in [this GitHub issue](../../issues/15). I'm more than welcome to listen to your opinions about that.
+
 # DAW Discord Rich Presence
 
 This is a small C# application that supports showing what you're making on your Digital Audio Workstation (DAW) in your Discord account using Discord Rich Presence.
