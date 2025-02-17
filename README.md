@@ -10,9 +10,6 @@ It will show as the following:
 
 *What is happening with Discord's profile UI?*
 
-[VirusTotal Scanning](https://www.virustotal.com/gui/file-analysis/MjRkZWY1N2M1ZmE4MmZmNTEwYjAzMzA1ZDFhZDgxNWI6MTcxOTcwODMwMg==)<br>
-1 detection from MaxSecure, is this false positive?
-
 ## List of DAW currently supported
 
 * FL Studio 11 or later
@@ -42,48 +39,37 @@ This app uses the [Process](https://docs.microsoft.com/en-us/dotnet/api/system.d
 
 ## Editing the source code
 
-Download the latest source code from this repository above and open `DAWRPC.sln` in your Visual Studio that supports .NET Framework 4. I used *Visual Studio 2010* to make this application (i know, this is an old version but my computer can't run a higher one), and I suggest that you should use it (although i know that no one uses it anymore) to edit my application.
+Download the latest source code from this repository above and open `DAWRPC.sln` in your Visual Studio that supports .NET Framework 4.
 
 ### You can add a new DAW support using this method:
 
 * **Step 1:** Go to your [Discord Developer Portal](https://discord.com/developers/applications) and create a new application with the DAW name you want to support.
 * **Step 2:** Go to your new application you have just created and click `Rich Presence -> App Assets`.
 * **Step 3:** Add a new Rich Presence Asset Image with the DAW icon. Set the Asset Image Name into `icon`.
-* **Step 4:** Open the `DAWRPC.sln` project file and open the `Form1.cs` file in your Visual Studio.
-* **Step 5:** Above the `// End DAW Process Variables` line, add the following code line:
+* **Step 4:** Open the `daws.json` file in your text editor, and add a new JSON object with these properties:
 
-```csharp
-var YourDAWName = Process.GetProcessesByName("YourDAWProcessName");
-```
+| Properties | Type | Description |
+| --- | --- | --- |
+| `ProcessName` | `string` | DAW's process name without `.exe` |
+| `DisplayText` | `string` | The text to be displayed when detected in DAWRPC |
+| `TitleRegex` | `string` | Regular expression from the DAW's window title. DAWRPC will take the first matched string as the "project name". |
+| `ClientID` | `string` | Discord Client ID for displaying Rich Presence.
+| `HideVersion` | `boolean` | Whether to hide the DAW version in DAWRPC. |
 
-with `YourDAWName` as the DAW name and `YourDAWProcessName` as your DAW Process Name in Task Manager (for example, `FL64` is the Process Name of FL Studio, and `Ableton Live 10 Suite` is the Process Name of Ableton Live 10 Suite).
+Here's the example for **Ableton Live 12 Suite**:
 
-* **Step 6:** Above the `// End DAW Process Information Grabbing` line, add the following code lines:
-
-```csharp
-else if (YourDAWName.Length != 0)
+```json
 {
-    DAWName.Text = "Your DAW Name";
-    if (SomeConditions)
-    {
-        ProjectOpening.Text = SomeScripts();
-    }
-    else
-    {
-        ProjectOpening.Text = "None";
-    }
-    CPUUsage.Text = GetCPUUsage(YourDAWName[0]) + "%";
-    RAMUsage.Text = GetRAMUsage(YourDAWName[0]);
-    clientID = "YourClientID";
-    versionText = YourDAWName[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
+    "ProcessName": "Ableton Live 12 Suite",
+    "DisplayText": "Ableton Live 12 Suite",
+    "TitleRegex": "^(.*?)(?= - Ableton Live 12 Suite)",
+    "ClientID": "1256769208704958464",
+    "HideVersion": false
 }
 ```
 
-with `YourDAWName` as the DAW variable you declared in the above step, `SomeConditions` as some conditions to check if the project name is other than `Untitled`, `SomeScripts()` is some commands to get the project title from the process, and `YourClientID` as the Client ID of the application created in Step 1.
-
-You can see an example in the source code repository.
-
-* **Step 7:** Run the application and test it. After that, you can [send me a Pull Request](https://github.com/lmharpae/DAWRPC/compare) with your new added DAW supporting in the source code.
+* **Step 5:** Copy the edited `daws.json` file to the same folder with your `DAWRPC.exe` and run the application to test the newly added DAW.
+* **Step 6:** After everything is okay, you can [send me a Pull Request](https://github.com/lmharpae/DAWRPC/compare) with your newly added DAW supporting in the source code.
 
 ## Contact the developer
 

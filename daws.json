@@ -1,0 +1,135 @@
+[
+    {
+        "ProcessName": "FL",
+        "DisplayText": "FL Studio",
+        "TitleRegex": "^(.*?)(?= - FL Studio)",
+        "ClientID": "908331713032241153",
+        "HideVersion": true
+    },
+    {
+        "ProcessName": "FL64",
+        "DisplayText": "FL Studio",
+        "TitleRegex": "^(.*?)(?= - FL Studio)",
+        "ClientID": "908331713032241153",
+        "HideVersion": true
+    },
+    {
+        "ProcessName": "Ableton Live 9 Intro",
+        "DisplayText": "Ableton Live 9 Intro",
+        "TitleRegex": "^(.*?)(?= - Ableton Live 9 Intro)",
+        "ClientID": "908336639913381918",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Ableton Live 10 Intro",
+        "DisplayText": "Ableton Live 10 Intro",
+        "TitleRegex": "^(.*?)(?= - Ableton Live 10 Intro)",
+        "ClientID": "908338941613207582",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Ableton Live 11 Intro",
+        "DisplayText": "Ableton Live 11 Intro",
+        "TitleRegex": "^(.*?)(?= - Ableton Live 11 Intro)",
+        "ClientID": "1189627743919411270",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Ableton Live 12 Intro",
+        "DisplayText": "Ableton Live 12 Intro",
+        "TitleRegex": "^(.*?)(?= - Ableton Live 12 Intro)",
+        "ClientID": "1256767428608790568",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Ableton Live 9 Suite",
+        "DisplayText": "Ableton Live 9 Suite",
+        "TitleRegex": "^(.*?)(?= - Ableton Live 9 Suite)",
+        "ClientID": "908335858212548608",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Ableton Live 10 Suite",
+        "DisplayText": "Ableton Live 10 Suite",
+        "TitleRegex": "^(.*?)(?= - Ableton Live 10 Suite)",
+        "ClientID": "908336162337349693",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Ableton Live 11 Suite",
+        "DisplayText": "Ableton Live 11 Suite",
+        "TitleRegex": "^(.*?)(?= - Ableton Live 11 Suite)",
+        "ClientID": "1189627361881235507",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Ableton Live 12 Suite",
+        "DisplayText": "Ableton Live 12 Suite",
+        "TitleRegex": "^(.*?)(?= - Ableton Live 12 Suite)",
+        "ClientID": "1256769208704958464",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Ableton Live 9 Standard",
+        "DisplayText": "Ableton Live 9 Standard",
+        "TitleRegex": "^(.*?)(?= - Ableton Live 9 Standard)",
+        "ClientID": "908342188759482388",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Ableton Live 10 Standard",
+        "DisplayText": "Ableton Live 10 Standard",
+        "TitleRegex": "^(.*?)(?= - Ableton Live 10 Standard)",
+        "ClientID": "908342338353528932",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Ableton Live 11 Standard",
+        "DisplayText": "Ableton Live 11 Standard",
+        "TitleRegex": "^(.*?)(?= - Ableton Live 11 Standard)",
+        "ClientID": "1189628515801366690",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Ableton Live 12 Standard",
+        "DisplayText": "Ableton Live 12 Standard",
+        "TitleRegex": "^(.*?)(?= - Ableton Live 12 Standard)",
+        "ClientID": "1256768586534486146",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "reaper",
+        "DisplayText": "REAPER",
+        "TitleRegex": "^(.*?)(?= - REAPER v)",
+        "ClientID": "909424276208255067",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Bitwig Studio",
+        "DisplayText": "Bitwig Studio",
+        "TitleRegex": "(?<=Bitwig Studio - ).*",
+        "ClientID": "909425705819992145",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Studio One",
+        "DisplayText": "Studio One",
+        "TitleRegex": "(?<=Studio One - ).*",
+        "ClientID": "909425503960727583",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "lmms",
+        "DisplayText": "LMMS",
+        "TitleRegex": "^(.*?)(?= - LMMS)",
+        "ClientID": "1180315820446982214",
+        "HideVersion": false
+    },
+    {
+        "ProcessName": "Cubase14",
+        "DisplayText": "Cubase 14",
+        "TitleRegex": "(?<=Cubase Pro Project - ).*",
+        "ClientID": "1337652654242795530",
+        "HideVersion": false
+    }
+]

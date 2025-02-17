@@ -1,0 +1,43 @@
+name: Build DAWRPC
+
+on:
+  push:
+    tags:
+      - v*
+
+permissions:
+  contents: write
+
+env:
+  RELEASE_VERSION: "${{github.ref_name}}"
+
+jobs:
+  build:
+    name: Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build the DAWRPC project
+        run: msbuild DAWRPC.sln /p:Configuration=Release /p:Platform="Any CPU"
+
+      - name: Copy daws.json from to Release folder
+        shell: powershell
+        run: Copy-Item -Path .\daws.json -Destination .\bin\Release
+
+      - name: Delete unnecessary files
+        shell: powershell
+        run: |
+          Delete-Item -Path .\bin\Release\DAWRPC.exe.config
+          Delete-Item -Path .\bin\Release\DAWRPC.exe.pdb
+
+      - name: Compress the Release folder
+        shell: powershell
+        run: Compress-Archive -Path .\bin\Release -DestinationPath .\DAWRPC.zip
+
+      - name: Upload the compressed file
+        run: gh release upload "$RELEASE_VERSION" --repo="$GITHUB_REPOSITORY" ".\DAWRPC.zip"

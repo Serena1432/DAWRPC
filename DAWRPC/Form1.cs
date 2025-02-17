@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using DiscordRPC;
 using System.Resources;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace DAWRPC
 {
@@ -19,416 +21,126 @@ namespace DAWRPC
             InitializeComponent();
         }
 
-        string currentDAWName = "None", version = "2.2.1", state = "", versionText = "", discordUsernameGlobal = "";
-        DiscordRpcClient client;
+        string currentDAWName = "None",
+               version = "2.3",
+               versionText = "",
+               discordUsernameGlobal = "";
 
-        DateTime lastTime, curTime, startTimestamp;
-        TimeSpan lastTotalProcessorTime, curTotalProcessorTime;
+        DiscordRpcClient client;
         ComponentResourceManager resources = new ComponentResourceManager(typeof(Form1));
 
-        bool errorDisplayed = false;
+        public Settings settings = new Settings();
+        List<DAWConfig> daws = new List<DAWConfig>();
+
+        bool errorDisplayed = false, hideDAWVersion = false;
+
+        public string settingsPath = Application.StartupPath + "\\settings.json";
+        public string dawConfigPath = Application.StartupPath + "\\daws.json";
+
+        RichPresence presence = new RichPresence();
+
+        // Settings Handler
+
+        private void UpdateSettingDisplay()
+        {
+            hideProjectNameContextMenu.Text = oFFHideProjectNameToolStripMenuItem.Text = "[" + (settings.HideProjectName ? "ON" : "OFF") + "] Hide Project Name";
+            hideSystemUsageContextMenu.Text = oFFHideSystemUsageToolStripMenuItem.Text = "[" + (settings.HideSystemUsage ? "ON" : "OFF") + "] Hide System Usage";
+        }
+
+        private void SetUpdateInterval()
+        {
+            int interval = Prompt.ShowDialog("Type the presence update interval (in miliseconds):", "Set Update Interval", settings.UpdateInterval);
+            if (interval < 1000) return;
+            settings.UpdateInterval = interval;
+            settings.Save();
+            MessageBox.Show("Successfully set the presence update interval.", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void ToggleHideProjectName()
+        {
+            settings.HideProjectName = !settings.HideProjectName;
+            settings.Save();
+            UpdateSettingDisplay();
+        }
+
+        private void ToggleHideSystemUsage()
+        {
+            settings.HideSystemUsage = !settings.HideSystemUsage;
+            settings.Save();
+            UpdateSettingDisplay();
+        }
+
+        // Form Handler
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            timer1.Enabled = false;
             if (Process.GetProcessesByName("DAWRPC").Length > 1)
             {
-                timer1.Enabled = false;
                 MessageBox.Show("Another instance of DAWRPC is already running.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                exiting = true;
                 Application.Exit();
             }
             this.Text = RPCMenuVersion.Text = "DAW Discord Rich Presence v" + version;
-        }
-
-        string GetCPUUsage(Process p)
-        {
-            if (lastTime == null || lastTime == new DateTime())
+            // Load settings from JSON file
+            settings.Load(settingsPath);
+            UpdateSettingDisplay();
+            timer1.Interval = settings.UpdateInterval;
+            if (!File.Exists(dawConfigPath))
             {
-                lastTime = DateTime.Now;
-                lastTotalProcessorTime = p.TotalProcessorTime;
+                MessageBox.Show("\"" + dawConfigPath + "\" not found.\nRedownload this file from the DAWRPC repository or create one yourself, and reopen this program.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                exiting = true;
+                Application.Exit();
             }
             else
             {
-                curTime = DateTime.Now;
-                curTotalProcessorTime = p.TotalProcessorTime;
-
-                double cpuUsage = (curTotalProcessorTime.TotalMilliseconds - lastTotalProcessorTime.TotalMilliseconds) / curTime.Subtract(lastTime).TotalMilliseconds / Convert.ToDouble(Environment.ProcessorCount);
-                string cpu = (cpuUsage * 100).ToString("N2");
-
-                lastTime = curTime;
-                lastTotalProcessorTime = curTotalProcessorTime;
-                return cpu;
+                // Load DAW configurations from JSON file
+                daws = JsonConvert.DeserializeObject<List<DAWConfig>>(File.ReadAllText(dawConfigPath));
+                timer1.Enabled = true;
+                presence.Assets = new Assets()
+                {
+                    LargeImageKey = "icon",
+                    LargeImageText = "DAWRPC v" + version + " by Harpae/Nico Levianth"
+                };
             }
-            return "Undefined";
         }
 
-        string GetRAMUsage(Process proc)
+        private void ChangeNotifyIcon(string color)
         {
-            long memsize = 0;
-            PerformanceCounter PC = new PerformanceCounter();
-            PC.CategoryName = "Process";
-            PC.CounterName = "Working Set - Private";
-            PC.InstanceName = proc.ProcessName;
-            memsize = (long)(PC.NextValue()) / (long)(1048576);
-            return memsize.ToString() + "MB";
+            notifyIcon1.Icon = (Icon)resources.GetObject(color);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             try
             {
-                // Begin DAW Process Variables
-                var FLStudio = Process.GetProcessesByName("FL");
-                var FLStudio64 = Process.GetProcessesByName("FL64");
-                var Ab9Intro = Process.GetProcessesByName("Ableton Live 9 Intro");
-                var Ab10Intro = Process.GetProcessesByName("Ableton Live 10 Intro");
-                var Ab11Intro = Process.GetProcessesByName("Ableton Live 11 Intro");
-                var Ab12Intro = Process.GetProcessesByName("Ableton Live 12 Intro");
-                var Ab9Stan = Process.GetProcessesByName("Ableton Live 9 Standard");
-                var Ab10Stan = Process.GetProcessesByName("Ableton Live 10 Standard");
-                var Ab11Stan = Process.GetProcessesByName("Ableton Live 11 Standard");
-                var Ab12Stan = Process.GetProcessesByName("Ableton Live 12 Standard");
-                var Ab9Suite = Process.GetProcessesByName("Ableton Live 9 Suite");
-                var Ab10Suite = Process.GetProcessesByName("Ableton Live 10 Suite");
-                var Ab11Suite = Process.GetProcessesByName("Ableton Live 11 Suite");
-                var Ab12Suite = Process.GetProcessesByName("Ableton Live 12 Suite");
-                var Reaper = Process.GetProcessesByName("reaper");
-                var Bitwig = Process.GetProcessesByName("Bitwig Studio");
-                var StudioOne = Process.GetProcessesByName("Studio One");
-                var LMMS = Process.GetProcessesByName("lmms");
-                var Cubase14 = Process.GetProcessesByName("Cubase14");
-
-                // End DAW Process Variables
                 string clientID = "";
-                // Begin DAW Information Grabbing
-                if (FLStudio.Length != 0)
+                bool isRunning = false;
+
+                // Begin Processing DAW Information
+                foreach (DAWConfig daw in daws)
                 {
-                    DAWName.Text = "FL Studio";
-                    string title = FLStudio[0].MainWindowTitle;
-                    if (title.Contains(" - FL Studio"))
+                    daw.Update(settings);
+                    if (daw.IsRunning)
                     {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 15);
+                        DAWName.Text = daw.DisplayText;
+                        ProjectOpening.Text = daw.ProjectName;
+                        CPUUsage.Text = daw.CPUUsage;
+                        RAMUsage.Text = daw.RAMUsage;
+                        clientID = daw.ClientID;
+                        versionText = daw.Version;
+                        hideDAWVersion = daw.HideVersion;
+                        isRunning = true;
+                        break;
                     }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(FLStudio[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(FLStudio[0]);
-                    clientID = "908331713032241153";
-                    state = CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
-                    versionText = FLStudio64[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
                 }
-                else if (FLStudio64.Length != 0)
-                {
-                    DAWName.Text = "FL Studio";
-                    string title = FLStudio64[0].MainWindowTitle;
-                    if (title.Contains(" - FL Studio"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 15);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(FLStudio64[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(FLStudio64[0]);
-                    clientID = "908331713032241153";
-                    versionText = FLStudio64[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Ab9Intro.Length != 0)
-                {
-                    DAWName.Text = "Ableton Live 9 Intro";
-                    string title = Ab9Intro[0].MainWindowTitle;
-                    if (title.Contains(" - Ableton Live 9 Intro"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 23);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Ab9Intro[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab9Intro[0]);
-                    clientID = "908336639913381918";
-                    versionText = Ab9Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Ab10Intro.Length != 0)
-                {
-                    DAWName.Text = "Ableton Live 10 Intro";
-                    string title = Ab10Intro[0].MainWindowTitle;
-                    if (title.Contains(" - Ableton Live 10 Intro"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 24);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Ab10Intro[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab10Intro[0]);
-                    clientID = "908338941613207582";
-                    versionText = Ab10Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Ab11Intro.Length != 0)
-                {
-                    DAWName.Text = "Ableton Live 11 Intro";
-                    string title = Ab11Intro[0].MainWindowTitle;
-                    if (title.Contains(" - Ableton Live 11 Intro"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 24);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Ab11Intro[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab11Intro[0]);
-                    clientID = "1189627743919411270";
-                    versionText = Ab11Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Ab12Intro.Length != 0)
-                {
-                    DAWName.Text = "Ableton Live 12 Intro";
-                    string title = Ab12Intro[0].MainWindowTitle;
-                    if (title.Contains(" - Ableton Live 12 Intro"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 24);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Ab12Intro[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab12Intro[0]);
-                    clientID = "1256767428608790568";
-                    versionText = Ab12Intro[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Ab9Suite.Length != 0)
-                {
-                    DAWName.Text = "Ableton Live 9 Suite";
-                    string title = Ab9Suite[0].MainWindowTitle;
-                    if (title.Contains(" - Ableton Live 9 Suite"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 23);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Ab9Suite[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab9Suite[0]);
-                    clientID = "908335858212548608";
-                    versionText = Ab9Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Ab10Suite.Length != 0)
-                {
-                    DAWName.Text = "Ableton Live 10 Suite";
-                    string title = Ab10Suite[0].MainWindowTitle;
-                    if (title.Contains(" - Ableton Live 10 Suite"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 24);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Ab10Suite[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab10Suite[0]);
-                    clientID = "908336162337349693";
-                    versionText = Ab10Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Ab11Suite.Length != 0)
-                {
-                    DAWName.Text = "Ableton Live 11 Suite";
-                    string title = Ab11Suite[0].MainWindowTitle;
-                    if (title.Contains(" - Ableton Live 11 Suite"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 24);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Ab11Suite[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab11Suite[0]);
-                    clientID = "1189627361881235507";
-                    versionText = Ab11Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Ab12Suite.Length != 0)
-                {
-                    DAWName.Text = "Ableton Live 12 Suite";
-                    string title = Ab12Suite[0].MainWindowTitle;
-                    if (title.Contains(" - Ableton Live 12 Suite"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 24);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Ab12Suite[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab12Suite[0]);
-                    clientID = "1256769208704958464";
-                    versionText = Ab12Suite[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Ab9Stan.Length != 0)
-                {
-                    DAWName.Text = "Ableton Live 9 Standard";
-                    string title = Ab10Stan[0].MainWindowTitle;
-                    if (title.Contains(" - Ableton Live 9 Standard"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 26);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Ab9Stan[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab9Stan[0]);
-                    clientID = "908342188759482388";
-                    versionText = Ab9Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Ab10Stan.Length != 0)
-                {
-                    DAWName.Text = "Ableton Live 10 Standard";
-                    string title = Ab10Stan[0].MainWindowTitle;
-                    if (title.Contains(" - Ableton Live 10 Standard"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 27);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Ab10Stan[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab10Stan[0]);
-                    clientID = "908342338353528932";
-                    versionText = Ab10Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Ab11Stan.Length != 0)
-                {
-                    DAWName.Text = "Ableton Live 11 Standard";
-                    string title = Ab11Stan[0].MainWindowTitle;
-                    if (title.Contains(" - Ableton Live 11 Standard"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 27);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Ab11Stan[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab11Stan[0]);
-                    clientID = "1189628515801366690";
-                    versionText = Ab11Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Ab12Stan.Length != 0)
-                {
-                    DAWName.Text = "Ableton Live 12 Standard";
-                    string title = Ab12Stan[0].MainWindowTitle;
-                    if (title.Contains(" - Ableton Live 12 Standard"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.Length - 27);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Ab12Stan[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Ab12Stan[0]);
-                    clientID = "1256768586534486146";
-                    versionText = Ab12Stan[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Reaper.Length != 0)
-                {
-                    DAWName.Text = "REAPER";
-                    string title = Reaper[0].MainWindowTitle;
-                    if (title.Contains(" - REAPER v"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.IndexOf(" - REAPER v"));
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Reaper[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Reaper[0]);
-                    clientID = "909424276208255067";
-                    versionText = Reaper[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Bitwig.Length != 0)
-                {
-                    DAWName.Text = "Bitwig Studio";
-                    string title = Bitwig[0].MainWindowTitle;
-                    if (title.Contains("Bitwig Studio - "))
-                    {
-                        ProjectOpening.Text = title.Substring(16, title.Length - 16);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Bitwig[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Bitwig[0]);
-                    clientID = "909425705819992145";
-                    versionText = Bitwig[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (StudioOne.Length != 0)
-                {
-                    DAWName.Text = "Studio One";
-                    string title = StudioOne[0].MainWindowTitle;
-                    if (title.Contains("Studio One - "))
-                    {
-                        ProjectOpening.Text = title.Substring(13, title.Length - 13);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(StudioOne[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(StudioOne[0]);
-                    clientID = "909425503960727583";
-                    versionText = StudioOne[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (LMMS.Length != 0)
-                {
-                    DAWName.Text = "LMMS";
-                    string title = LMMS[0].MainWindowTitle;
-                    if (title.Contains(" - LMMS"))
-                    {
-                        ProjectOpening.Text = title.Substring(0, title.IndexOf(" - LMMS"));
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(LMMS[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(LMMS[0]);
-                    clientID = "1180315820446982214";
-                    versionText = LMMS[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                else if (Cubase14.Length != 0)
-                {
-                    DAWName.Text = "Cubase 14";
-                    string title = Cubase14[0].MainWindowTitle;
-                    if (title.Contains("Cubase Pro Project - "))
-                    {
-                        ProjectOpening.Text = title.Substring(21, title.Length - 21);
-                    }
-                    else
-                    {
-                        ProjectOpening.Text = "None";
-                    }
-                    CPUUsage.Text = GetCPUUsage(Cubase14[0]) + "%";
-                    RAMUsage.Text = GetRAMUsage(Cubase14[0]);
-                    clientID = "1337652654242795530";
-                    versionText = Cubase14[0].Modules[0].FileVersionInfo.ProductVersion.ToString();
-                }
-                // End DAW Process Information Grabbing
-                else
+
+                if (!isRunning)
                 {
                     DAWName.Text = "None";
                     ProjectOpening.Text = "None";
+                    CPUUsage.Text = "Undefined";
+                    RAMUsage.Text = "Undefined";
                 }
 
                 // Update DAWRPC Information
@@ -443,7 +155,8 @@ namespace DAWRPC
                             discordUsernameGlobal = readyEvent.User.Username;
                             try
                             {
-                                if (!String.IsNullOrEmpty(readyEvent.User.Username)) discordUsername.Text = "Logged in as " + readyEvent.User.Username;
+                                if (!String.IsNullOrEmpty(readyEvent.User.Username))
+                                    discordUsername.Text = "Logged in as " + readyEvent.User.Username;
                                 else discordUsername.Text = "No Discord user available";
                                 errorDisplayed = false;
                             }
@@ -452,7 +165,7 @@ namespace DAWRPC
                         client.OnConnectionFailed += (cfSender, cfEvent) =>
                         {
                             discordUsername.Text = "Connection failed";
-                            notifyIcon1.Icon = (Icon)resources.GetObject("red");
+                            ChangeNotifyIcon("red");
                             if (!errorDisplayed)
                             {
                                 MessageBox.Show("Cannot connect to Discord pipe " + cfEvent.FailedPipe.ToString() + ".", "DAWRPC Connection Error");
@@ -462,7 +175,7 @@ namespace DAWRPC
                         client.OnError += (eSender, eEvent) =>
                         {
                             discordUsername.Text = "An error has been occurred";
-                            notifyIcon1.Icon = (Icon)resources.GetObject("red");
+                            ChangeNotifyIcon("red");
                             if (!errorDisplayed)
                             {
                                 MessageBox.Show("Cannot connect to Discord RPC server.\nCode " + eEvent.Code.ToString() + ": " + eEvent.Message, "DAWRPC Connection Error");
@@ -473,19 +186,22 @@ namespace DAWRPC
                         {
                             if (!String.IsNullOrEmpty(discordUsernameGlobal)) discordUsername.Text = "Logged in as " + discordUsernameGlobal;
                             else discordUsername.Text = "No Discord user available";
-                            notifyIcon1.Icon = (Icon)resources.GetObject("green");
+                            ChangeNotifyIcon("green");
                             errorDisplayed = false;
                         };
                         client.OnPresenceUpdate += (eSender, eEvent) =>
                         {
                             if (!String.IsNullOrEmpty(discordUsernameGlobal)) discordUsername.Text = "Logged in as " + discordUsernameGlobal;
                             else discordUsername.Text = "No Discord user available";
-                            notifyIcon1.Icon = (Icon)resources.GetObject("green");
+                            ChangeNotifyIcon("green");
                             errorDisplayed = false;
                         };
                         client.Initialize();
                         currentDAWName = DAWName.Text;
-                        startTimestamp = DateTime.UtcNow;
+                        presence.Timestamps = new Timestamps()
+                        {
+                            Start = DateTime.UtcNow
+                        };
                     }
                     catch
                     {
@@ -498,23 +214,18 @@ namespace DAWRPC
                 }
                 if (DAWName.Text != "None")
                 {
-                    string details = "Opening project: " + ProjectOpening.Text;
-                    state = "v" + versionText + ", " + CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
-                    if (ProjectOpening.Text == "None" || ProjectOpening.Text == "Untitled") details = "Opening an untitled project";
-                    client.SetPresence(new RichPresence()
+                    if (settings.HideSystemUsage)
                     {
-                        Timestamps = new Timestamps()
-                        {
-                            Start = startTimestamp
-                        },
-                        Details = details,
-                        State = state,
-                        Assets = new Assets()
-                        {
-                            LargeImageKey = "icon",
-                            LargeImageText = "DAWRPC v" + version + " by Harpae/Nico Levianth"
-                        }
-                    });
+                        presence.Details = "Opening project:";
+                        presence.State = ProjectOpening.Text;
+                    }
+                    else
+                    {
+                        presence.Details = "Opening project: " + ProjectOpening.Text;
+                        if (ProjectOpening.Text == "None" || ProjectOpening.Text == "Untitled") presence.Details = "Opening an untitled project";
+                        presence.State = (hideDAWVersion ? ("v" + versionText + ", ") : "") + CPUUsage.Text + " of CPU usage, " + RAMUsage.Text + " of RAM usage";
+                    }
+                    client.SetPresence(presence);
                 }
                 else if (client != null)
                 {
@@ -528,6 +239,8 @@ namespace DAWRPC
 
             }
         }
+
+        // Menu Buttons
 
         bool exiting = false;
 
@@ -549,6 +262,36 @@ namespace DAWRPC
                 e.Cancel = true;
                 this.Hide();
             }
+        }
+
+        private void setUpdateIntervalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetUpdateInterval();
+        }
+
+        private void setUpdateIntervalContextMenu_Click(object sender, EventArgs e)
+        {
+            SetUpdateInterval();
+        }
+
+        private void hideProjectNameContextMenu_Click(object sender, EventArgs e)
+        {
+            ToggleHideProjectName();
+        }
+
+        private void hideSystemUsageContextMenu_Click(object sender, EventArgs e)
+        {
+            ToggleHideSystemUsage();
+        }
+
+        private void oFFHideProjectNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleHideProjectName();
+        }
+
+        private void oFFHideSystemUsageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleHideSystemUsage();
         }
     }
 }
