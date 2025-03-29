@@ -1,4 +1,4 @@
-### This project is about to be reworked as a new one as described in [this GitHub issue](../../issues/15). I'm more than welcome to listen to your opinions about that.
+### This project is about to be in an archived state soon to prepare for a new similar but better project. Thank you for your support in these years!
 
 # DAW Discord Rich Presence
 
